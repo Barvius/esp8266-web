@@ -2,11 +2,11 @@
   "title": "домой",
   "link": "index.htm"
 }, {
-  "title": "домой",
-  "link": "index.htm"
+  "title": "ed",
+  "link": "edit"
 }, {
   "title": "Датчики",
-  "link": "sensor.htm"
+  "link": "sensors.htm"
 }, {
   "title": "Обновление",
   "link": "firmware.htm"

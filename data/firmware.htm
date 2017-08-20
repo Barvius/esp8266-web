@@ -20,11 +20,11 @@
 
 
   <div id="menu"></div>
-  
+
   <div class="container">
 
     <legend>Обновление прошивки</legend>
-    <form method='POST' id="formx" action="javascript:void(null);" onsubmit="call()">
+    <form method='POST' id="formx" action="javascript:void(null);" onsubmit="call()" enctype='multipart/form-data'>
       <div class="form-group">
         <input type="file" name="update" class="file">
         <div class="input-group">
@@ -58,17 +58,22 @@
   $("#ale").alert("fade");
 
   function call() {
-    var msg = $('#formx').serialize();
+    var msg = new FormData($("#formx")[0]);
     $.ajax({
       type: 'POST',
-      url: 'update',
+      url: '/update',
+      dataType: 'json',
       data: msg,
+      processData: false,
+      contentType: false,
+      timeout: false,
       success: function(data) {
-        if (data == "OK") {
+        if (data === "OK") {
           $('#msg').html("успешно");
         }
       },
       error: function(xhr, str) {
+        console.log(xhr);console.warn(str);
         alert('Возникла ошибка: ' + xhr.responseCode);
       }
     });

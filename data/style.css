@@ -9,6 +9,13 @@
   position: absolute;
 }
 
+.card-body{
+  padding: 1rem;
+  line-height: 1.25rem;
+}
+.r{
+  padding: 5px;
+}
 body,html {
 padding: 0;
 margin: 0;

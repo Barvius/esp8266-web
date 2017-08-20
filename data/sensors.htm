@@ -1,0 +1,74 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>Датчики</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+  <script src="script.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://use.fontawesome.com/020bea21fd.js"></script>
+</head>
+
+<body>
+
+
+  <div id="menu"></div>
+
+  <div class="container">
+
+    <legend>Датчики</legend>
+    <div class="row" id="app">
+
+    </div>
+
+  </div>
+</body>
+<script>
+  $(document).ready(function() {
+    var icon;
+    var description;
+    var prefix;
+    $.getJSON("raw", function(data) {
+      $.each(data, function(key, val) {
+        for (var i in val) {
+          if (i == "h") {
+            icon = '<i class="fa fa-tint" aria-hidden="true"></i>';
+            description = 'Влажность(' + key + ')';
+            prefix = '%';
+          }
+          if (i == "t") {
+            icon = '<i class="fa fa-thermometer-empty" aria-hidden="true"></i>';
+            description = 'Температура(' + key + ')';
+            prefix = '°C';
+          }
+          if (i == "p") {
+            icon = '<i class="fa fa-bullseye" aria-hidden="true"></i>';
+            description = 'Давление(' + key + ')';
+            prefix = 'мм';
+          }
+          console.log("key: " + i + ", value: " + val[i]);
+          $('#app').append(
+            '<div class = "r col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" > \
+            <div class = "card " > \
+            <div class = "card-body" >' + icon + ' ' + description +
+            '<span class="badge badge-pill badge-success float-right">\
+            '+ val[i] + ' ' + prefix + '</span></div></div></div>'
+          );
+        }
+
+        // /\$('#navbar').append('<li class="nav-item"><a class="nav-link" href="' + val.link + '">' + val.title + '</a></li>');
+
+        console.log(key);
+        console.log(val);
+      });
+    });
+  });
+</script>
+
+</html>
