@@ -1,5 +1,5 @@
 [{
-  "title": "домой",
+  "title": "Info",
   "link": "index.htm"
 }, {
   "title": "ed",
@@ -8,6 +8,6 @@
   "title": "Датчики",
   "link": "sensors.htm"
 }, {
-  "title": "Обновление",
-  "link": "firmware.htm"
+  "title": "Настройки",
+  "link": "config.htm"
 } ]

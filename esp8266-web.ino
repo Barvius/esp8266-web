@@ -11,21 +11,24 @@
 
 #define DHT_PIN 13
 #define DS18B20_PIN 14
+#define postingInterval  300000
 
 String _ssid; // Для хранения SSID
 String _password; // Для хранения пароля сети
 String _ssidAP = "WiFi";   // SSID AP точки доступа
 String _passwordAP = ""; // пароль точки доступа
+String Hostname;
 bool DS_EN;
 bool DHT_EN;
 bool BMP_EN;
+bool NM_EN;
+int NM_INTERVAL;
 //String hostname;
 int timezone = 3;               // часовой пояс GTM
 
 String jsonConfig = "{}";
+unsigned long lastConnectionTime = 0;
 
-
-int deviceCount;
 OneWire oneWire(DS18B20_PIN);
 DallasTemperature sensors(&oneWire);
 DHT dht(DHT_PIN, DHT11);
@@ -73,7 +76,6 @@ void setup() {
   pinMode(12, OUTPUT);
   digitalWrite(12, LOW);
 
-
 }
 
 
@@ -85,4 +87,12 @@ void loop() {
   HTTP.handleClient();
   delay(1);
   digitalWrite(12, HIGH);
+  
+  if (millis() - lastConnectionTime > NM_INTERVAL && NM_EN) { // ждем 5 минут и отправляем
+      if (WiFi.status() == WL_CONNECTED) { // ну конечно если подключены
+      if (Narodmon()) {
+      lastConnectionTime = millis();
+      }else{  lastConnectionTime = millis() - postingInterval + 15000; }//следующая попытка через 15 сек    
+      }else{  lastConnectionTime = millis() - postingInterval + 15000; Serial.println("Not connected to WiFi");}//следующая попытка через 15 сек
+    }
 }

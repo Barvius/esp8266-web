@@ -29,6 +29,8 @@ bool loadConfig() {
   DS_EN = root["ds_en"];
   DHT_EN = root["dht_en"];
   BMP_EN = root["bmp_en"];
+  NM_EN = root["nm_en"];
+  NM_INTERVAL = root["nm_interval"];
   //  DHT_PIN = root["dht_pin"];
   //  DS18B20_PIN = root["ds18b20_pin"];
   //  if (DS18B20_PIN) {
@@ -54,6 +56,8 @@ bool saveConfig() {
   json["ds_en"] = DS_EN;
   json["dht_en"] = DHT_EN;
   json["bmp_en"] = BMP_EN;
+  json["nm_en"] = NM_EN;
+  json["nm_interval"] = NM_INTERVAL;
   // Помещаем созданный json в глобальную переменную json.printTo(jsonConfig);
   json.printTo(jsonConfig);
   // Открываем файл для записи

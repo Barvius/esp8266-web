@@ -10,6 +10,7 @@ void HTTP_init(void) {
   HTTP.on("/ds", ds_config);
   HTTP.on("/dht", dht_config);
   HTTP.on("/bmp", bmp_config);
+  HTTP.on("/nm", nm_config);
 //  HTTP.on("/ds18b20", handle_Set_DS18b20_Pin);
   //  HTTP.on("/irc", irControlweb);   // обрашение к ИК через web интерфейс
   //  HTTP.on("/Time", handle_Time); // обрашение к реле через web интерфейс
@@ -56,28 +57,38 @@ void sys(){
 }
 
 void ds_config() {
-  if(HTTP.arg("en")){
+  if(HTTP.argName(0) == "en")){
      DS_EN = HTTP.arg("en").toInt();
      saveConfig();
      HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
   }
-  
 }
 void dht_config() {
-  if(HTTP.arg("en")){
+  if(HTTP.argName(0) == "en")){
      DHT_EN = HTTP.arg("en").toInt();
      saveConfig();
      HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
   }
-  
 }
 void bmp_config() {
-  if(HTTP.arg("en")){
+  if(HTTP.argName(0) == "en")){
      BMP_EN = HTTP.arg("en").toInt();
      saveConfig();
      HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
   }
-  
+}
+
+void nm_config() {
+  if(HTTP.argName(0) == "en"){
+     NM_EN = HTTP.arg("en").toInt();
+     saveConfig();
+     HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
+  }
+  if(HTTP.argName(0) == "interval"){
+     NM_INTERVAL = HTTP.arg("interval").toInt();
+     saveConfig();
+     HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
+  }
 }
 //void handle_Set_DS18b20_Pin() {
 //  DS18B20_PIN = HTTP.arg("pin").toInt(); // Получаем значение ssdp из запроса сохраняем в глобальной переменной
