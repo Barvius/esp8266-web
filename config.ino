@@ -23,18 +23,21 @@ bool loadConfig() {
   //  строку возьмем из глобальной переменной String jsonConfig
   JsonObject& root = jsonBuffer.parseObject(jsonConfig);
   // Теперь можно получить значения из root
-  timezone = root["timezone"];               // Так получаем число
-  _ssid = root["ssidName"].as<String>();
-  _password = root["ssidPassword"].as<String>();
-//  DHT_PIN = root["dht_pin"];
-//  DS18B20_PIN = root["ds18b20_pin"];
-//  if (DS18B20_PIN) {
-//    OneWire oneWire(DS18B20_PIN);
-//    DallasTemperature sensors(&oneWire);
-//  }
-//  if(DHT_PIN){
-//    DHT dht(DHT_PIN, DHT11);
-//  }
+  //timezone = root["timezone"];               // Так получаем число
+  //_ssid = root["ssidName"].as<String>();
+  //_password = root["ssidPassword"].as<String>();
+  DS_EN = root["ds_en"];
+  DHT_EN = root["dht_en"];
+  BMP_EN = root["bmp_en"];
+  //  DHT_PIN = root["dht_pin"];
+  //  DS18B20_PIN = root["ds18b20_pin"];
+  //  if (DS18B20_PIN) {
+  //    OneWire oneWire(DS18B20_PIN);
+  //    DallasTemperature sensors(&oneWire);
+  //  }
+  //  if(DHT_PIN){
+  //    DHT dht(DHT_PIN, DHT11);
+  //  }
   return true;
 }
 
@@ -45,11 +48,12 @@ bool saveConfig() {
   //  вызовите парсер JSON через экземпляр jsonBuffer
   JsonObject& json = jsonBuffer.parseObject(jsonConfig);
   // Заполняем поля json
-  json["ssidName"] = _ssid;
-  json["ssidPassword"] = _password;
-  json["timezone"] = timezone;
-//  json["dht_pin"] = DHT_PIN;
-//  json["ds18b20_pin"] = DS18B20_PIN;
+  //json["ssidName"] = _ssid;
+  //json["ssidPassword"] = _password;
+  //json["timezone"] = timezone;
+  json["ds_en"] = DS_EN;
+  json["dht_en"] = DHT_EN;
+  json["bmp_en"] = BMP_EN;
   // Помещаем созданный json в глобальную переменную json.printTo(jsonConfig);
   json.printTo(jsonConfig);
   // Открываем файл для записи

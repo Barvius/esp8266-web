@@ -26,7 +26,7 @@
     <legend>Обновление прошивки</legend>
     <form method='POST' id="formx" action="javascript:void(null);" onsubmit="call()" enctype='multipart/form-data'>
       <div class="form-group">
-        <input type="file" name="update" class="file">
+        <input type="file" name="update" class="file" require>
         <div class="input-group">
           <input type="text" class="form-control input-lg" disabled placeholder="Binary">
           <span class="input-group-btn">
@@ -45,8 +45,6 @@
   </div>
 </body>
 <script>
-
-
   $(document).on('click', '.browse', function() {
     var file = $(this).parent().parent().parent().find('.file');
     file.trigger('click');
@@ -59,10 +57,11 @@
 
   function call() {
     var msg = new FormData($("#formx")[0]);
+
+
     $.ajax({
       type: 'POST',
       url: '/update',
-      dataType: 'json',
       data: msg,
       processData: false,
       contentType: false,
@@ -73,7 +72,8 @@
         }
       },
       error: function(xhr, str) {
-        console.log(xhr);console.warn(str);
+        console.log(xhr);
+        console.warn(str);
         alert('Возникла ошибка: ' + xhr.responseCode);
       }
     });

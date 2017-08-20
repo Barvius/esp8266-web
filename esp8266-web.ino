@@ -16,7 +16,10 @@ String _ssid; // Для хранения SSID
 String _password; // Для хранения пароля сети
 String _ssidAP = "WiFi";   // SSID AP точки доступа
 String _passwordAP = ""; // пароль точки доступа
-String hostname;
+bool DS_EN;
+bool DHT_EN;
+bool BMP_EN;
+//String hostname;
 int timezone = 3;               // часовой пояс GTM
 
 String jsonConfig = "{}";
@@ -53,8 +56,9 @@ void setup() {
   loadConfig();
 
   sensors.begin();
+  sensors.setResolution(12);
   dht.begin();
-  deviceCount = sensors.getDeviceCount();  // узнаем количество подключенных градусников
+
 
 
   if (!bmp.begin()) {

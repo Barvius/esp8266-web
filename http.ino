@@ -7,7 +7,9 @@ void HTTP_init(void) {
   HTTP.on("/raw", raw); // обрашение к реле через web интерфейс
   HTTP.on("/restart", restart); 
   HTTP.on("/sys", sys); 
-//  HTTP.on("/dht", handle_Set_Dht_Pin);
+  HTTP.on("/ds", ds_config);
+  HTTP.on("/dht", dht_config);
+  HTTP.on("/bmp", bmp_config);
 //  HTTP.on("/ds18b20", handle_Set_DS18b20_Pin);
   //  HTTP.on("/irc", irControlweb);   // обрашение к ИК через web интерфейс
   //  HTTP.on("/Time", handle_Time); // обрашение к реле через web интерфейс
@@ -45,17 +47,38 @@ void sys(){
  json +=  fs_info.totalBytes;
   json += ",\"physical\":\"";
  json += WiFi.macAddress();
+ json += "\",\"uptime\":";
+ json += millis();
 
- json += "\"}";
+ json += "}";
 
  HTTP.send(200, "text/json", json);
 }
 
-//void handle_Set_Dht_Pin() {
-//  DHT_PIN = HTTP.arg("pin").toInt(); // Получаем значение ssdp из запроса сохраняем в глобальной переменной
-//  saveConfig();                 // Функция сохранения данных во Flash пока пустая
-//  HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
-//}
+void ds_config() {
+  if(HTTP.arg("en")){
+     DS_EN = HTTP.arg("en").toInt();
+     saveConfig();
+     HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
+  }
+  
+}
+void dht_config() {
+  if(HTTP.arg("en")){
+     DHT_EN = HTTP.arg("en").toInt();
+     saveConfig();
+     HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
+  }
+  
+}
+void bmp_config() {
+  if(HTTP.arg("en")){
+     BMP_EN = HTTP.arg("en").toInt();
+     saveConfig();
+     HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
+  }
+  
+}
 //void handle_Set_DS18b20_Pin() {
 //  DS18B20_PIN = HTTP.arg("pin").toInt(); // Получаем значение ssdp из запроса сохраняем в глобальной переменной
 //  saveConfig();                 // Функция сохранения данных во Flash пока пустая
