@@ -26,6 +26,7 @@ bool loadConfig() {
   //timezone = root["timezone"];               // Так получаем число
   //_ssid = root["ssidName"].as<String>();
   //_password = root["ssidPassword"].as<String>();
+  Hostname = root["hostname"].as<String>();
   DS_EN = root["ds_en"];
   DHT_EN = root["dht_en"];
   BMP_EN = root["bmp_en"];
@@ -53,6 +54,7 @@ bool saveConfig() {
   //json["ssidName"] = _ssid;
   //json["ssidPassword"] = _password;
   //json["timezone"] = timezone;
+  json["hostname"] = Hostname;
   json["ds_en"] = DS_EN;
   json["dht_en"] = DHT_EN;
   json["bmp_en"] = BMP_EN;

@@ -10,9 +10,11 @@
 #include <Adafruit_BMP085.h>
 
 #define DHT_PIN 13
-#define DS18B20_PIN 14
+#define DS18B20_PIN 12
 #define postingInterval  300000
 
+  ADC_MODE(ADC_VCC);
+  
 String _ssid; // Для хранения SSID
 String _password; // Для хранения пароля сети
 String _ssidAP = "WiFi";   // SSID AP точки доступа
@@ -23,7 +25,7 @@ bool DHT_EN;
 bool BMP_EN;
 bool NM_EN;
 int NM_INTERVAL;
-//String hostname;
+
 int timezone = 3;               // часовой пояс GTM
 
 String jsonConfig = "{}";
@@ -43,6 +45,13 @@ void setup() {
   Serial.begin(115200);
 
 
+  //настраиваем HTTP интерфейс
+
+  HTTP_init();
+  FS_init();
+  loadConfig();
+  WiFi.hostname(Hostname);
+  
   //Включаем WiFiManager
   WiFiManager wifiManager;
 
@@ -52,12 +61,7 @@ void setup() {
 
   //если подключение к точке доступа произошло сообщаем
   Serial.println("connected...yeey :)");
-  //настраиваем HTTP интерфейс
-
-  HTTP_init();
-  FS_init();
-  loadConfig();
-
+  
   sensors.begin();
   sensors.setResolution(12);
   dht.begin();
@@ -73,8 +77,6 @@ void setup() {
 
   //  sensors.getAddress(Address18b20, 0);
   //sensors.setResolution(12);
-  pinMode(12, OUTPUT);
-  digitalWrite(12, LOW);
 
 }
 
@@ -86,7 +88,6 @@ void loop() {
   // put your main code here, to run repeatedly:
   HTTP.handleClient();
   delay(1);
-  digitalWrite(12, HIGH);
   
   if (millis() - lastConnectionTime > NM_INTERVAL && NM_EN) { // ждем 5 минут и отправляем
       if (WiFi.status() == WL_CONNECTED) { // ну конечно если подключены

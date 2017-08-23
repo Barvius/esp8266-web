@@ -1,7 +1,7 @@
 
 
 void raw() {
-  digitalWrite(12, LOW);
+
   int deviceCount = sensors.getDeviceCount();  // узнаем количество подключенных градусников
   sensors.requestTemperatures();
  

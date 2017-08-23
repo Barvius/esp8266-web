@@ -23,7 +23,7 @@
 
   <div class="container">
 
-    <legend>Датчики</legend>
+    <!-- <legend>Датчики</legend> -->
     <div class="row" id="app">
 
     </div>
@@ -42,23 +42,51 @@ function msToTime(s) {
     var prefix;
     $.getJSON("sys", function(data) {
       $.each(data, function(key, val) {
-        if (key == "uptime") {
-          val = msToTime(val);
-        }
-        $('#app').append(
-          '<div class = "r col-6" > \
-          '+key+'\
-          </div>\
-          <div class = "r col-6" > \
-          '+val+'\
-          </div></div>'
-        );
+
+          if (key == "ip") {
+            icon = '<i class="fa fa-globe" aria-hidden="true"></i>';
+            description = 'IP';
+          }
+          if (key == "mac") {
+            icon = '<i class="fa fa-microchip" aria-hidden="true"></i>';
+            description = 'MAC';
+          }
+          if (key == "ssid") {
+            icon = '<i class="fa fa-wifi" aria-hidden="true"></i>';
+            description = 'AP';
+          }
+          if (key == "rssi") {
+            icon = '<i class="fa fa-exchange" aria-hidden="true"></i>';
+            description = 'Strength';
+            val += ' dBm';
+          }
+          if (key == "vcc") {
+            icon = '<i class="fa fa-battery-full" aria-hidden="true"></i>';
+            description = 'Vcc';
+            val = (val/1000).toFixed(2);
+            val += ' V';
+          }
+          if (key == "uptime") {
+            icon = '<i class="fa fa-clock-o" aria-hidden="true"></i>';
+            description = 'Uptime';
+            val = msToTime(val);
+          }
+
+          $('#app').append(
+            '<div class = "grid-box col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" > \
+            <div class = "card " > \
+            <div class = "card-body" >' + icon + ' ' + description +
+            '<span class="float-right">\
+            '+ val + '</span></div></div></div>'
+          );
+
+
+        // /\$('#navbar').append('<li class="nav-item"><a class="nav-link" href="' + val.link + '">' + val.title + '</a></li>');
 
         console.log(key);
         console.log(val);
-
+      });
     });
-  });
   });
 </script>
 

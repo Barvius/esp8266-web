@@ -2,7 +2,7 @@ bool Narodmon() { // Собственно формирование пакета 
   WiFiClient client;
   String buf;
    DeviceAddress tempDeviceAddress;
-  buf = "#" + WiFi.macAddress() + "\r\n"; // заголовок
+  buf = "#" + WiFi.macAddress() + "#" + Hostname + "\r\n"; // заголовок
   int deviceCount = sensors.getDeviceCount();  // узнаем количество подключенных градусников
   sensors.requestTemperatures();
 
