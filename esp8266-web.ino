@@ -28,7 +28,7 @@ int NM_INTERVAL;
 
 int timezone = 3;               // часовой пояс GTM
 
-String jsonConfig = "{}";
+
 unsigned long lastConnectionTime = 0;
 
 OneWire oneWire(DS18B20_PIN);

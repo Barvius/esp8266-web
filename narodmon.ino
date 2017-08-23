@@ -45,6 +45,7 @@ bool Narodmon() { // Собственно формирование пакета 
       Serial.print(line);
     }
   }
+  history();
   return true; //ушло
  }
 

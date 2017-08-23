@@ -1,9 +1,4 @@
 void HTTP_init(void) {
-  // Включаем работу с файловой системой
-
-
-
-  //Создание ответа
   HTTP.on("/raw", raw); // обрашение к реле через web интерфейс
   HTTP.on("/restart", restart);
   HTTP.on("/sys", sys);
@@ -12,22 +7,82 @@ void HTTP_init(void) {
   HTTP.on("/bmp", bmp_config);
   HTTP.on("/nm", nm_config);
   HTTP.on("/hostname", hostname_config);
-
-  //  HTTP.on("/ds18b20", handle_Set_DS18b20_Pin);
-  //  HTTP.on("/irc", irControlweb);   // обрашение к ИК через web интерфейс
-  //  HTTP.on("/Time", handle_Time); // обрашение к реле через web интерфейс
-  //  HTTP.on("/xml",handleXML); // формирование xml страницы для передачи данных в web интерфейс
-  // Добавляем функцию Update для перезаписи прошивки
+  HTTP.on("/history", history_handler);
+  HTTP.on("/available_networks", available_networks_handler);
   update();
-  // Запускаем HTTP сервер
   HTTP.begin();
 }
 
+void history_handler() {
+  String json = "[";
+  for (int i = 0; i < 10; i++) {
+    if (i){
+       json += ",[";
+    } else {
+       json += "[";
+    }
+   
+    for (int j = 0; j < 6; j++) {
+      json += History[i][j];
+      if(j < 5){
+      json += ",";
+      }
+    }
+    json += "]";
+  }
+  json += "]";
+  HTTP.send(200, "text/json", json);
+}
+
+void available_networks_handler() {
+  String json = "[";
+  int n = WiFi.scanNetworks();
+
+  if (n) {
+    for (int i = 0; i < n; ++i) {
+      if (i) {
+        json += ",";
+      }
+      json += "{";
+      json += "\"ssid\":\"";
+      json += WiFi.SSID(i);
+      json += "\",\"rssi\":";
+      json += WiFi.RSSI(i);
+      json += ",\"encryption\":\"";
+      //      json += WiFi.encryptionType(i);
+      switch (WiFi.encryptionType(i)) {
+        case ENC_TYPE_NONE:
+          json += "NONE";
+          break;
+        case ENC_TYPE_WEP:
+          json += "WEP";
+          break;
+        case ENC_TYPE_TKIP:
+          json += "TKIP";
+          break;
+        case ENC_TYPE_CCMP:
+          json += "CCMP";
+          break;
+        case ENC_TYPE_AUTO:
+          json += "AUTO";
+          break;
+        default:
+          json += "?";
+          break;
+      }
+      json += "\"}";
+      delay(10);
+    }
+  }
+  json += "]";
+  HTTP.send(200, "text/json", json);
+}
 
 void restart() {
   HTTP.send(200, "text / plain", "Reset OK");
   ESP.restart();
 }
+
 void sys() {
   FSInfo fs_info;
   SPIFFS.info(fs_info);

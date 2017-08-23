@@ -1,3 +1,4 @@
+String jsonConfig = "{}";
 bool loadConfig() {
   // Открываем файл для чтения
   File configFile = SPIFFS.open("/config.json", "r");
