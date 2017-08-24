@@ -10,8 +10,11 @@
 }
 
 .card-body{
-  padding: 1rem;
+  padding: 0.75rem;
   line-height: 1.25rem;
+}
+.card-sensor, .card-body{
+  border-bottom: 1px solid rgba(0,0,0,.125);
 }
 .grid-box{
   padding: 5px;
@@ -23,4 +26,7 @@ margin: 0;
 
 img, table {
   border: 0;
+}
+.chart{
+  margin: 10px;
 }

@@ -13,9 +13,9 @@ void raw() {
     pre = true;
     json += "\"dht\":{";
     json += "\"t\":";
-    json += dht.readTemperature();
+    json += (float)dht.readTemperature();
     json += ",\"h\":";
-    json += dht.readHumidity();
+    json += (float)dht.readHumidity();
     json += "}";
   }
   if (BMP_EN) {

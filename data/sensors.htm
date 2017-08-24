@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
@@ -28,6 +29,8 @@
     </div>
 
   </div>
+
+
 </body>
 <script>
   $(document).ready(function() {
@@ -55,10 +58,11 @@
           console.log("key: " + i + ", value: " + val[i]);
           $('#app').append(
             '<div class = "grid-box col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3" > \
-            <div class = "card " > \
+            <div class = "card card-sensor" > \
             <div class = "card-body" >' + icon + ' ' + description +
             '<span class="badge badge-pill badge-success float-right">\
-            '+ val[i] + ' ' + prefix + '</span></div></div></div>'
+            ' + val[i] + ' ' + prefix + '</span></div>\
+            <canvas class="chart" id="' + key + i + '" ></canvas></div></div>'
           );
         }
 
@@ -67,8 +71,56 @@
         console.log(key);
         console.log(val);
       });
+      dr();
     });
   });
+</script>
+<script>
+  function dr() {
+    var ids = ["dhtt", "dhth", "bmpt", "bmpp", "ds_0t", "ds_1t"];
+    $.getJSON("history", function(data) {
+      $.each(data, function(key, val) {
+        console.log(val);
+        console.log(key);
+
+        var ctx = document.getElementById(ids[key]).getContext('2d');
+        var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ["-30", "-25", "-15", "-10", "-5", "now"],
+            datasets: [{
+              label: "Unfilled",
+              fill: false,
+              // borderColor: 'red',
+              // pointBorderColor: 'green',
+              // pointBackgroundColor: 'rgba(255,150,0,0.5)',
+
+              data: val
+            }]
+          },
+          options: {
+            responsive: false,
+            legend: {
+              display: false
+            },
+            tooltips: {
+              enabled: false
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                        callback: function (value) {
+                            return value.toFixed(1);
+                        }
+                    }
+              }],
+            },
+          }
+        });
+
+      });
+    });
+  }
 </script>
 
 </html>

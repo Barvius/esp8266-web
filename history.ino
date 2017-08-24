@@ -9,8 +9,8 @@ void push_history(int row, float val) {
 
 void history() { // Собственно формирование пакета и отправка.
   if (DHT_EN) {
-    push_history(0, dht.readTemperature());
-    push_history(1, dht.readHumidity());
+    push_history(0, (float)dht.readTemperature());
+    push_history(1, (float)dht.readHumidity());
   }
   if (BMP_EN) {
     push_history(2, bmp.readTemperature());

@@ -8,10 +8,10 @@ bool Narodmon() { // Собственно формирование пакета 
 
   if (DHT_EN) {
     buf += "#T1#";
-    buf += dht.readTemperature();
+    buf += (float)dht.readTemperature();
     buf += "\n";
     buf += "#H1#";
-    buf += dht.readHumidity();
+    buf += (float)dht.readHumidity();
     buf += "\n";
   }
   if (BMP_EN) {
