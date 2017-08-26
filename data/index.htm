@@ -36,6 +36,18 @@ function msToTime(s) {
   var pad = (n, z = 2) => ('00' + n).slice(-z);
   return pad(s/3.6e6|0) + ':' + pad((s%3.6e6)/6e4 | 0) + ':' + pad((s%6e4)/1000|0);
 }
+function convertMS(ms) {
+  var d, h, m, s;
+  s = Math.floor(ms / 1000);
+  m = Math.floor(s / 60);
+  s = s % 60;
+  h = Math.floor(m / 60);
+  m = m % 60;
+  d = Math.floor(h / 24);
+  h = h % 24;
+  // return { d: d, h: h, m: m, s: s };
+  return d+'d '+h+'h '+m+'m '+s+'s';
+};
   $(document).ready(function() {
     var icon;
     var description;
@@ -69,7 +81,7 @@ function msToTime(s) {
           if (key == "uptime") {
             icon = '<i class="fa fa-clock-o" aria-hidden="true"></i>';
             description = 'Uptime';
-            val = msToTime(val);
+            val = convertMS(val);
           }
 
           $('#app').append(

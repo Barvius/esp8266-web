@@ -74,8 +74,7 @@
       dr();
     });
   });
-</script>
-<script>
+
   function dr() {
     var ids = ["dhtt", "dhth", "bmpt", "bmpp", "ds_0t", "ds_1t"];
     $.getJSON("history", function(data) {
@@ -91,9 +90,9 @@
             datasets: [{
               label: "Unfilled",
               fill: false,
-              // borderColor: 'red',
-              // pointBorderColor: 'green',
-              // pointBackgroundColor: 'rgba(255,150,0,0.5)',
+              borderColor: '#28a745',
+              pointBorderColor: '#28a745',
+              pointBackgroundColor: 'rgba(40,167,69,0.5)',
 
               data: val
             }]
