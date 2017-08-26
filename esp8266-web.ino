@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
+#include <ESP8266HTTPUpdateServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 #include <FS.h>
 #include <ArduinoJson.h>
@@ -25,8 +26,7 @@ bool DHT_EN;
 bool BMP_EN;
 bool NM_EN;
 int NM_INTERVAL;
-
-int timezone = 3;               // часовой пояс GTM
+int Timezone;               // часовой пояс GTM
 
 
 unsigned long lastConnectionTime = 0;
@@ -35,6 +35,8 @@ OneWire oneWire(DS18B20_PIN);
 DallasTemperature sensors(&oneWire);
 DHT dht(DHT_PIN, DHT11);
 Adafruit_BMP085 bmp;
+
+ESP8266HTTPUpdateServer httpUpdater;
 // Web интерфейс для устройства
 ESP8266WebServer HTTP(80);
 // Для файловой системы
@@ -46,7 +48,7 @@ void setup() {
 
 
   //настраиваем HTTP интерфейс
-
+  Time_init();
   HTTP_init();
   FS_init();
   loadConfig();

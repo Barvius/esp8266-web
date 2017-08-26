@@ -1,10 +1,13 @@
-float History[10][6];
+float History[10][10];
+time_t Time_h[10];
 
 void push_history(int row, float val) {
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 10; i++) {
     History[row][i] = History[row][i + 1];
+    Time_h[i]=Time_h[i+1];
   }
-  History[row][5] = val;
+  History[row][9] = val;
+  Time_h[9]=GetUnixTime();
 }
 
 void history() { // Собственно формирование пакета и отправка.
@@ -25,7 +28,10 @@ void history() { // Собственно формирование пакета �
       push_history(4 + i, sensors.getTempCByIndex(i));
     }
   }
-
+   for (int i = 0; i < 10; i++) {
+    Time_h[i]=Time_h[i+1];
+  }
+  Time_h[9]=GetUnixTime();
 }
 
 

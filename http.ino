@@ -14,23 +14,36 @@ void HTTP_init(void) {
 }
 
 void history_handler() {
-  String json = "[";
+  String json = "{";
+  json += "\"time\" : [";
   for (int i = 0; i < 10; i++) {
-    if (i){
-       json += ",[";
-    } else {
-       json += "[";
-    }
-   
-    for (int j = 0; j < 6; j++) {
-      json += History[i][j];
-      if(j < 5){
+    json += "\"";
+    json += GetTime(Time_h[i]);
+    json += "\"";
+    if (i < 9) {
       json += ",";
+    }
+  }
+  json += "],";
+json += "\"data\" : [";
+  for (int i = 0; i < 10; i++) {
+    if (i) {
+      json += ",[";
+    } else {
+      json += "[";
+    }
+
+    for (int j = 0; j < 10; j++) {
+      json += History[i][j];
+      if (j < 9) {
+        json += ",";
       }
     }
+    
     json += "]";
   }
   json += "]";
+  json += "}";
   HTTP.send(200, "text/json", json);
 }
 

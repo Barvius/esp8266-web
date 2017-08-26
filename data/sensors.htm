@@ -78,7 +78,7 @@
   function dr() {
     var ids = ["dhtt", "dhth", "bmpt", "bmpp", "ds_0t", "ds_1t"];
     $.getJSON("history", function(data) {
-      $.each(data, function(key, val) {
+      $.each(data.data, function(key, val) {
         console.log(val);
         console.log(key);
 
@@ -86,7 +86,7 @@
         var myChart = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: ["-30", "-25", "-15", "-10", "-5", "now"],
+            labels: data.time,
             datasets: [{
               label: "Unfilled",
               fill: false,
