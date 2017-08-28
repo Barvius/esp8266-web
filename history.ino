@@ -1,16 +1,17 @@
-float History[10][10];
-time_t Time_h[10];
+float History[12][10];
+time_t Time_h[12];
 
 void push_history(int row, float val) {
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 12; i++) {
     History[row][i] = History[row][i + 1];
-    Time_h[i]=Time_h[i+1];
+
   }
-  History[row][9] = val;
-  Time_h[9]=GetUnixTime();
+  History[row][11] = val;
+  
 }
 
 void history() { // Собственно формирование пакета и отправка.
+//  timeSynch(Timezone);
   if (DHT_EN) {
     push_history(0, (float)dht.readTemperature());
     push_history(1, (float)dht.readHumidity());
@@ -28,10 +29,10 @@ void history() { // Собственно формирование пакета �
       push_history(4 + i, sensors.getTempCByIndex(i));
     }
   }
-   for (int i = 0; i < 10; i++) {
-    Time_h[i]=Time_h[i+1];
+  for (int i = 0; i < 12; i++) {
+    Time_h[i] = Time_h[i + 1];
   }
-  Time_h[9]=GetUnixTime();
+  Time_h[11] = GetUnixTime();
 }
 
 

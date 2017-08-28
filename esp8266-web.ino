@@ -48,8 +48,8 @@ void setup() {
 
 
   //настраиваем HTTP интерфейс
-  Time_init();
-  HTTP_init();
+  
+
   FS_init();
   loadConfig();
   WiFi.hostname(Hostname);
@@ -63,7 +63,8 @@ void setup() {
 
   //если подключение к точке доступа произошло сообщаем
   Serial.println("connected...yeey :)");
-  
+  HTTP_init();
+  Time_init();
   sensors.begin();
   sensors.setResolution(12);
   dht.begin();
