@@ -12,14 +12,14 @@
 
 #define DHT_PIN 13
 #define DS18B20_PIN 12
-#define postingInterval  300000
 
-  ADC_MODE(ADC_VCC);
-  
-String _ssid; // Для хранения SSID
-String _password; // Для хранения пароля сети
-String _ssidAP = "WiFi";   // SSID AP точки доступа
-String _passwordAP = ""; // пароль точки доступа
+
+ADC_MODE(ADC_VCC);
+
+//String _ssid; // Для хранения SSID
+//String _password; // Для хранения пароля сети
+//String _ssidAP = "WiFi";   // SSID AP точки доступа
+//String _passwordAP = ""; // пароль точки доступа
 String Hostname;
 bool DS_EN;
 bool DHT_EN;
@@ -28,8 +28,7 @@ bool NM_EN;
 int NM_INTERVAL;
 int Timezone;               // часовой пояс GTM
 
-
-unsigned long lastConnectionTime = 0;
+unsigned long LastSendTimer_0 = 0;
 
 OneWire oneWire(DS18B20_PIN);
 DallasTemperature sensors(&oneWire);
@@ -48,12 +47,12 @@ void setup() {
 
 
   //настраиваем HTTP интерфейс
-  
+
 
   FS_init();
   loadConfig();
   WiFi.hostname(Hostname);
-  
+
   //Включаем WiFiManager
   WiFiManager wifiManager;
 
@@ -73,13 +72,7 @@ void setup() {
 
   if (!bmp.begin()) {
     Serial.println("Could not find a valid BMP180 sensor, check wiring!");
-
   }
-
-
-
-  //  sensors.getAddress(Address18b20, 0);
-  //sensors.setResolution(12);
 
 }
 
@@ -88,15 +81,20 @@ void setup() {
 
 
 void loop() {
-  // put your main code here, to run repeatedly:
+
   HTTP.handleClient();
   delay(1);
-  
-  if (millis() - lastConnectionTime > NM_INTERVAL && NM_EN) { // ждем 5 минут и отправляем
-      if (WiFi.status() == WL_CONNECTED) { // ну конечно если подключены
+
+  if (millis() - LastSendTimer_0 > NM_INTERVAL && NM_EN) {
+    if (WiFi.status() == WL_CONNECTED) {
       if (Narodmon()) {
-      lastConnectionTime = millis();
-      }else{  lastConnectionTime = millis() - postingInterval + 15000; }//следующая попытка через 15 сек    
-      }else{  lastConnectionTime = millis() - postingInterval + 15000; Serial.println("Not connected to WiFi");}//следующая попытка через 15 сек
+        LastSendTimer_0 = millis();
+      } else {
+        LastSendTimer_0 = millis() - NM_INTERVAL + 15000;
+      }
+    } else {
+      LastSendTimer_0 = millis() - NM_INTERVAL + 15000;
+      Serial.println("Not connected to WiFi");
     }
+  }
 }

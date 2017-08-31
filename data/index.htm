@@ -52,7 +52,7 @@ function convertMS(ms) {
     var icon;
     var description;
     var prefix;
-    $.getJSON("sys", function(data) {
+    $.getJSON("system_info", function(data) {
       $.each(data, function(key, val) {
 
           if (key == "ip") {

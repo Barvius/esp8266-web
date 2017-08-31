@@ -1,7 +1,7 @@
 void HTTP_init(void) {
   HTTP.on("/raw", raw); // обрашение к реле через web интерфейс
   HTTP.on("/restart", restart);
-  HTTP.on("/sys", sys);
+  HTTP.on("/system_info", system_info_handler);
   HTTP.on("/ds", ds_config);
   HTTP.on("/dht", dht_config);
   HTTP.on("/bmp", bmp_config);
@@ -25,7 +25,7 @@ void history_handler() {
     }
   }
   json += "],";
-json += "\"data\" : [";
+  json += "\"data\" : [";
   for (int i = 0; i < 10; i++) {
     if (i) {
       json += ",[";
@@ -39,7 +39,7 @@ json += "\"data\" : [";
         json += ",";
       }
     }
-    
+
     json += "]";
   }
   json += "]";
@@ -50,7 +50,6 @@ json += "\"data\" : [";
 void available_networks_handler() {
   String json = "[";
   int n = WiFi.scanNetworks();
-
   if (n) {
     for (int i = 0; i < n; ++i) {
       if (i) {
@@ -96,12 +95,7 @@ void restart() {
   ESP.restart();
 }
 
-void sys() {
-  FSInfo fs_info;
-  SPIFFS.info(fs_info);
-
-  HTTP.sendHeader("Connection", "close");
-  HTTP.sendHeader("Access-Control-Allow-Origin", "*");
+void system_info_handler() {
   String json = "{";
   json += "\"mac\":\"";
   json += WiFi.macAddress();
@@ -116,7 +110,6 @@ void sys() {
   json += ",\"vcc\":";
   json +=  ESP.getVcc();
   json += "}";
-
   HTTP.send(200, "text/json", json);
 }
 
