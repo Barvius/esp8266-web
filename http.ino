@@ -16,11 +16,11 @@ void HTTP_init(void) {
 void history_handler() {
   String json = "{";
   json += "\"time\" : [";
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 12; i++) {
     json += "\"";
     json += GetTime(Time_h[i]);
     json += "\"";
-    if (i < 9) {
+    if (i < 11) {
       json += ",";
     }
   }
@@ -33,9 +33,9 @@ void history_handler() {
       json += "[";
     }
 
-    for (int j = 0; j < 10; j++) {
-      json += History[i][j];
-      if (j < 9) {
+    for (int j = 0; j < 12; j++) {
+      json += History[j][i];
+      if (j < 11) {
         json += ",";
       }
     }

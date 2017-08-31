@@ -3,15 +3,15 @@ time_t Time_h[12];
 
 void push_history(int row, float val) {
   for (int i = 0; i < 12; i++) {
-    History[row][i] = History[row][i + 1];
+    History[i][row] = History[i+1][row];
 
   }
-  History[row][11] = val;
+  History[11][row] = val;
   
 }
 
 void history() { // Собственно формирование пакета и отправка.
-//  timeSynch(Timezone);
+  timeSynch(Timezone);
   if (DHT_EN) {
     push_history(0, (float)dht.readTemperature());
     push_history(1, (float)dht.readHumidity());
