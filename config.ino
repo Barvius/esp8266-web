@@ -34,6 +34,10 @@ bool loadConfig() {
   NM_EN = root["nm_en"];
   NM_INTERVAL = root["nm_interval"];
   Timezone = root["timezone"];
+   M_Server = root["M_Server"].as<String>();
+  M_Port = root["M_Port"];
+  M_User = root["M_User"].as<String>();
+  M_Password = root["M_Password"].as<String>();
   //  DHT_PIN = root["dht_pin"];
   //  DS18B20_PIN = root["ds18b20_pin"];
   //  if (DS18B20_PIN) {
@@ -63,6 +67,10 @@ bool saveConfig() {
   json["nm_en"] = NM_EN;
   json["nm_interval"] = NM_INTERVAL;
   json["timezone"] = Timezone;
+  json["M_Server"] = M_Server;
+  json["M_Port"] = M_Port;
+  json["M_User"] = M_User;
+  json["M_Password"] = M_Password;
   // Помещаем созданный json в глобальную переменную json.printTo(jsonConfig);
   json.printTo(jsonConfig);
   // Открываем файл для записи
