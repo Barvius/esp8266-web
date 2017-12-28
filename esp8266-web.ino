@@ -100,11 +100,12 @@ void refreshData() {
      client.publish("Data/BMP/p", String(bmp.readPressure() / 133.3));
   }
   if (DS_EN) {
+      String buf;
     for (int i = 0; i < deviceCount; i++)  { //перечисляем датчики и их показания
       sensors.getAddress(tempDeviceAddress, i);
-      String buf;
+    
+      buf="";
       for (uint8_t i = 0; i < 8; i++) {
-        buf="";
         if (tempDeviceAddress[i] < 16) buf += "0";  // адрес датчика
         buf += String(tempDeviceAddress[i], HEX);
       }
