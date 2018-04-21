@@ -26,9 +26,11 @@ void raw() {
     }
     pre = true;
     json += "\"t\":";
-    json += bmp.readTemperature();
-    json += ",\"p\":";
-    json += bmp.readPressure() / 133.3;
+    json += bme.readTemperature();
+    json += ",\"h\":";
+    json += bme.readHumidity();
+     json += ",\"p\":";
+    json += bme.readPressure() / 133.3;
     json += "}";
   } 
   if (DS_EN) {

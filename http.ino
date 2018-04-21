@@ -10,8 +10,44 @@ void HTTP_init(void) {
   HTTP.on("/history", history_handler);
   HTTP.on("/available_networks", available_networks_handler);
   HTTP.on("/mqtt", config_mqtt_handler);
+  HTTP.on("/i2c", i2c);
   update();
   HTTP.begin();
+}
+
+void i2c() {
+  String buf = "";
+  byte error, address;
+  int nDevices;
+  nDevices = 0;
+  for (address = 1; address < 127; address++ )
+  {
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+    if (error == 0)
+    {
+      buf+="I2C device found at address 0x";
+      if (address < 16)
+        buf+="0";
+      buf+=String(address, HEX);
+      buf+="  !<br>";
+
+      nDevices++;
+    }
+    else if (error == 4)
+    {
+       buf+="Unknow error at address 0x";
+      if (address < 16)
+        buf+="0";
+      buf+=String(address, HEX);
+      buf+=" <br>";
+    }
+  }
+  if (nDevices == 0)
+    buf+="No I2C devices found\n";
+  else
+    buf+="done\n";
+    HTTP.send(200, "text/plain", buf); 
 }
 
 void config_mqtt_handler() {
@@ -23,7 +59,7 @@ void config_mqtt_handler() {
     saveConfig();
     HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
   }
-  
+
   //HTTP.send(404, "text/plain", "ERR"); // отправляем ответ о выполнении
 }
 

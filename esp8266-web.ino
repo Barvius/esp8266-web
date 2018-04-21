@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
+#include <ESP8266HTTPClient.h>
 #include <ESP8266HTTPUpdateServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 #include <FS.h>
@@ -8,7 +9,9 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <DHT.h>
-#include <Adafruit_BMP085.h>
+#include <Wire.h>
+#include <Adafruit_BME280.h>
+
 #include <PubSubClient.h>
 
 #define DHT_PIN 13
@@ -39,7 +42,9 @@ unsigned long LastSendTimer_0 = 0;
 OneWire oneWire(DS18B20_PIN);
 DallasTemperature sensors(&oneWire);
 DHT dht(DHT_PIN, DHT11);
-Adafruit_BMP085 bmp;
+//Adafruit_BMP085 bmp;
+
+Adafruit_BME280 bme;
 
 ESP8266HTTPUpdateServer httpUpdater;
 // Web интерфейс для устройства
@@ -96,8 +101,9 @@ void refreshData() {
      client.publish("Data/DHT1/h", String(dht.readHumidity()));
   }
   if (BMP_EN) {
-     client.publish("Data/BMP/t", String(bmp.readTemperature()));
-     client.publish("Data/BMP/p", String(bmp.readPressure() / 133.3));
+     client.publish("Data/BMP/t", String(bme.readTemperature()));
+     client.publish("Data/BMP/p", String(bme.readPressure() / 133.3));
+      client.publish("Data/BMP/h", String(bme.readHumidity()));
   }
   if (DS_EN) {
       String buf;
@@ -129,7 +135,7 @@ void setup() {
   client.set_server(M_Server, M_Port);
   client.set_callback(callback);
   
-  WiFi.hostname(Hostname);
+  //WiFi.hostname(Hostname);
 
   //Включаем WiFiManager
   WiFiManager wifiManager;
@@ -148,7 +154,7 @@ void setup() {
 
 
 
-  if (!bmp.begin()) {
+  if (!bme.begin()) {
     Serial.println("Could not find a valid BMP180 sensor, check wiring!");
   }
 
@@ -157,9 +163,45 @@ void setup() {
 
 
 
+unsigned long intervalsend = 0;
+
+void snd() {
+  if (millis() - intervalsend > 20000) {
+    HTTPClient httpClient;
+
+
+    int deviceCount = sensors.getDeviceCount();  // узнаем количество подключенных градусников
+    sensors.requestTemperatures();
+
+    String req = "cid=" + String(ESP.getChipId());
+
+    req += "&humidity_"+String(ESP.getChipId())+"=";
+    req += bme.readHumidity();
+    req += "&pressure_"+String(ESP.getChipId())+"=";
+    req += bme.readPressure() / 133.3;
+    for (int i = 0; i <= deviceCount - 1; i++) {
+      DeviceAddress Address18b20;
+      sensors.getAddress(Address18b20, i);
+      String tmp = "";
+      String t = "";
+      for (int i = 0; i < 8; i++) {
+        t = String(Address18b20[i], HEX);
+        while ( t.length() < 2)  t = "0" +  t;
+        tmp += t;
+      }
+      req += "&" +tmp+"=";
+      req += sensors.getTempC(Address18b20);
+    }
+    httpClient.begin("http://192.168.1.141/update.php?" + req);
+    httpClient.GET();
+    httpClient.end();
+    intervalsend = millis();
+  }
+
+}
 
 void loop() {
-
+snd();
   HTTP.handleClient();
   delay(1);
 if (client.connected()) {

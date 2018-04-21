@@ -15,12 +15,12 @@ bool Narodmon() { // Собственно формирование пакета 
     buf += "\n";
   }
   if (BMP_EN) {
-    buf += "#T2#";
-    buf += bmp.readTemperature();
-    buf += "\n";
-    buf += "#P1#";
-    buf += bmp.readPressure() / 133.3;
-    buf += "\n";
+//    buf += "#T2#";
+//    buf += bmp.readTemperature();
+//    buf += "\n";
+//    buf += "#P1#";
+//    buf += bmp.readPressure() / 133.3;
+//    buf += "\n";
   }
   if (DS_EN) {
     for (int i = 0; i < deviceCount; i++)  { //перечисляем датчики и их показания

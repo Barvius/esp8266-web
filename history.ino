@@ -17,8 +17,9 @@ void history() { // Собственно формирование пакета �
     push_history(1, (float)dht.readHumidity());
   }
   if (BMP_EN) {
-    push_history(2, bmp.readTemperature());
-    push_history(3, bmp.readPressure() / 133.3);
+    push_history(2, bme.readTemperature());
+    push_history(3, bme.readPressure() / 133.3);
+    push_history(4, bme.readHumidity());
   }
   if (DS_EN) {
     int deviceCount = sensors.getDeviceCount();  // узнаем количество подключенных градусников
@@ -26,7 +27,7 @@ void history() { // Собственно формирование пакета �
     DeviceAddress tempDeviceAddress;
     for (int i = 0; i < deviceCount; i++)  {
       sensors.getAddress(tempDeviceAddress, i);
-      push_history(4 + i, sensors.getTempCByIndex(i));
+      push_history(5 + i, sensors.getTempCByIndex(i));
     }
   }
   for (int i = 0; i < 12; i++) {
